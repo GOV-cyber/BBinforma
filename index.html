@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Conta BB — Formulário</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bb-yellow: #ffe600;
+      --bb-blue: #001fa8;
+      --bg-dark: #0b0f18;
+      --white: #ffffff;
+    }
+    *{box-sizing:border-box}
+    body{ margin:0; font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:#eef2ff; background:#0b0f18; }
+    .topbar{ background:var(--bb-yellow); color:#111; position:sticky; top:0; z-index:50; border-bottom:1px solid rgba(0,0,0,.08); }
+    .container{ max-width:1200px; margin:0 auto; padding:0 20px; }
+    .topbar .row{ display:flex; align-items:center; gap:18px; padding:10px 0; flex-wrap:wrap; }
+    .logo{ display:flex; align-items:center; gap:10px; font-weight:800; color:#0a0f1a;}
+    .logo .mark{ width:28px; height:28px; background:#001fa8; border-radius:6px; position:relative; overflow:hidden; }
+    .logo .mark:before,.logo .mark:after{ content:""; position:absolute; background:#ffe600; border-radius:2px; }
+    .logo .mark:before{ width:16px; height:4px; left:6px; top:8px; transform:rotate(30deg);}
+    .logo .mark:after { width:16px; height:4px; left:6px; top:16px; transform:rotate(-30deg);}
+    nav{ display:flex; gap:18px; flex-wrap:wrap; font-weight:600;}
+    nav a{ color:#111; text-decoration:none; padding:6px 8px; border-radius:8px;}
+    nav a:hover{ background:rgba(0,0,0,.06); }
+    .search{ margin-left:auto; display:flex; align-items:center; gap:10px; flex:1; max-width:520px; }
+    .search input{ width:100%; padding:10px 12px; border:1px solid rgba(0,0,0,.15); border-radius:10px; outline:none; }
+    .login{ background:#111; color:#fff; border:none; cursor:pointer; padding:10px 14px; border-radius:10px; font-weight:700; }
+    .breadcrumb{ background:#001fa8; color:#dbe4ff; }
+    .breadcrumb .container{ padding:10px 20px; }
+    .hero{ position:relative; background: radial-gradient(1200px 600px at 100% 10%, rgba(0,31,168,.25), transparent 60%), linear-gradient(180deg,#0a0f1a,#0a0f1a 30%, #0b1220 100%); color:#eef2ff; padding:50px 0 40px; overflow:hidden; }
+    .hero-inner{ display:grid; grid-template-columns: 1.2fr 1fr; gap:32px; align-items:center; }
+    @media (max-width: 900px){ .hero-inner{ grid-template-columns:1fr; } }
+    .copy h1{ font-size: clamp(28px, 5vw, 56px); line-height:1.05; margin:0 0 12px; color:#ffe600; text-shadow: 0 8px 22px rgba(0,0,0,.35); }
+    .copy p{ margin:0 0 22px; color:#cdd7ff; font-size: clamp(15px, 2.1vw, 18px); max-width: 560px; }
+    .qr-card{ display:flex; gap:14px; align-items:center; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.18); border-radius:14px; padding:14px; width:max-content; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+    .qr{ width:96px; height:96px; background:#fff; border-radius:8px; position:relative; overflow:hidden; }
+    .qr:before{ content:""; position:absolute; inset:8px; background: conic-gradient(from 0deg at 25% 25%, #000 0 25%, transparent 0 100%), conic-gradient(from 0deg at 75% 25%, #000 0 25%, transparent 0 100%), conic-gradient(from 0deg at 25% 75%, #000 0 25%, transparent 0 100%), conic-gradient(from 0deg at 75% 75%, #000 0 25%, transparent 0 100%); background-size: 16px 16px; background-repeat: repeat; opacity:.9; }
+    .shape{ position:absolute; opacity:.9; filter: drop-shadow(0 24px 40px rgba(0,0,0,.45)); }
+    .shape.chev{ width: 260px; height: 260px; border: 22px solid transparent; border-radius: 20px; transform: rotate(45deg); }
+    .shape.c1{ right: -30px; bottom: -40px; border-color:#00d4ff; }
+    .shape.c2{ right: 160px; bottom: 40px; border-color:#ffe600; }
+    .shape.c3{ right: 340px; bottom: -10px; border-color:#00b2ff; }
+    .shape.c4{ right: 520px; bottom: 60px; border-color:#7affc6; }
+    .form-wrap{ background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border-top: 1px solid rgba(255,255,255,.08); padding: 24px 0 80px; }
+    .form-card{ background: rgba(10,15,26,.6); border: 1px solid rgba(255,255,255,.14); border-radius: 18px; padding: 20px; display:grid; grid-template-columns:1fr 1fr; gap:16px; box-shadow: 0 20px 40px rgba(0,0,0,.35); }
+    @media (max-width: 800px){ .form-card{ grid-template-columns:1fr; } }
+    .form-card h2{ grid-column:1/-1; margin:0 0 6px; font-size: clamp(20px, 3.4vw, 28px); color:#ffe600; }
+    .field{ display:flex; flex-direction:column; gap:6px; }
+    .field label{ font-weight:600; color:#e5edff; }
+    .field input{ padding:12px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.06); color:#eef2ff; outline:none; }
+    .field input::placeholder{ color:#c8d0f8; opacity:.7; }
+    .help{ color:#b9c6ff; font-size:12px; opacity:.9; }
+    .actions{ grid-column:1/-1; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    .btn{ border:none; padding:12px 16px; border-radius:12px; cursor:pointer; font-weight:800; letter-spacing:.3px; }
+    .btn-primary{ background:#ffe600; color:#10141f; }
+    .btn-outline{ background:transparent; color:#e6edff; border:1px solid rgba(255,255,255,.25); }
+    .note{ grid-column:1/-1; color:#cdd7ff; font-size:12px; }
+    .cookies{ position:fixed; left:0; right:0; bottom:0; background: rgba(13,17,26,.9); color:#e6edff; border-top:1px solid rgba(255,255,255,.1); padding:14px 0; z-index:60; }
+    .cookies .row{ display:flex; gap:18px; align-items:center; flex-wrap:wrap;}
+    .cookies p{ margin:0; color:#b9c6ff; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <div class="row">
+        <div class="logo">
+          <div class="mark" aria-hidden="true"></div>
+          <span>Banco do Brasil</span>
+        </div>
+        <nav aria-label="principal">
+          <a href="#">Pra Você</a>
+          <a href="#">Pro Seu Negócio</a>
+          <a href="#">Agronegócios</a>
+          <a href="#">Setor Público</a>
+        </nav>
+        <div class="search">
+          <input type="search" placeholder="O que você precisa?">
+          <button class="login">ACESSE SUA CONTA ▾</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumb">
+    <div class="container"><small>Pra você / Contas</small></div>
+  </div>
+
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="copy">
+        <h1>Conta BB</h1>
+        <p>Soluções personalizadas para a sua gestão financeira, com segurança e praticidade.</p>
+        <div class="qr-card" aria-label="QR code para baixar o App BB">
+          <div class="qr" role="img" aria-label="QR code ilustrativo"></div>
+          <small>Aponte a câmera do celular para baixar o App BB.</small>
+        </div>
+      </div>
+      <div class="photo" aria-hidden="true"></div>
+    </div>
+    <div class="shape chev c1"></div>
+    <div class="shape chev c2"></div>
+    <div class="shape chev c3"></div>
+    <div class="shape chev c4"></div>
+  </section>
+
+  <section class="form-wrap">
+    <div class="container">
+      <div class="form-card" id="form-card">
+        <h2>Pré‑cadastro de conta</h2>
+
+        <div class="field">
+          <label for="conta">Número da Conta</label>
+          <input id="conta" name="conta" type="text" inputmode="numeric" placeholder="Ex.: 12345-6" minlength="5" maxlength="12" required>
+          <div class="help">Somente números (aceita hífen). Ex.: 12345-6</div>
+        </div>
+
+        <div class="field">
+          <label for="nome">Nome</label>
+          <input id="nome" name="nome" type="text" placeholder="Seu nome completo" autocomplete="name" required>
+        </div>
+
+        <div class="field">
+          <label for="cpf">CPF</label>
+          <input id="cpf" name="cpf" type="text" inputmode="numeric" placeholder="000.000.000-00" pattern="^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$" required>
+          <div class="help">Formato: 000.000.000-00</div>
+        </div>
+
+        <div class="field">
+          <label for="nasc">Data Nasc.</label>
+          <input id="nasc" name="nasc" type="date" required>
+        </div>
+
+        <div class="note">
+          Ao enviar, você concorda com a <a href="#" style="color:#9dd1ff;">Política de Privacidade</a>.
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" id="enviar">Enviar</button>
+          <button class="btn btn-outline" id="limpar" type="button">Limpar</button>
+          <span id="status" aria-live="polite"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cookies" role="dialog" aria-live="polite">
+    <div class="container">
+      <div class="row">
+        <p>Usamos cookies para segurança e personalização. Consulte a <a href="#" style="color:#9dd1ff;">Política de Privacidade</a>.</p>
+        <div style="margin-left:auto; display:flex; gap:10px;">
+          <button class="btn btn-outline">CONFIGURAR COOKIES</button>
+          <button class="btn btn-primary" style="color:#0a0f1a;">PERMITIR TODOS</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Máscara leve para CPF e conta
+    const cpf = document.getElementById('cpf');
+    cpf.addEventListener('input', () => {
+      let v = cpf.value.replace(/\D/g,'');
+      if (v.length > 11) v = v.slice(0,11);
+      let out = v;
+      if (v.length > 9) out = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/,'$1.$2.$3-$4');
+      else if (v.length > 6) out = v.replace(/(\d{3})(\d{3})(\d{0,3})/,'$1.$2.$3');
+      else if (v.length > 3) out = v.replace(/(\d{3})(\d{0,3})/,'$1.$2');
+      cpf.value = out;
+    });
+
+    const conta = document.getElementById('conta');
+    conta.addEventListener('input', () => {
+      let v = conta.value.replace(/[^\\d-]/g,'');
+      conta.value = v.slice(0,12);
+    });
+
+    const btn = document.getElementById('enviar');
+    const limpar = document.getElementById('limpar');
+    const statusEl = document.getElementById('status');
+
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const formCard = document.getElementById('form-card');
+      const requiredOk = [...formCard.querySelectorAll('input[required]')].every(i => i.reportValidity());
+      if (!requiredOk) return;
+      btn.disabled = true; btn.textContent = 'Enviando…';
+      statusEl.textContent = '';
+      setTimeout(() => {
+        btn.disabled = false; btn.textContent = 'Enviar';
+        statusEl.textContent = '✔️ Dados enviados (demonstração). Integre com sua API.';
+      }, 800);
+    });
+
+    limpar.addEventListener('click', () => {
+      document.getElementById('conta').value = '';
+      document.getElementById('nome').value = '';
+      document.getElementById('cpf').value = '';
+      document.getElementById('nasc').value = '';
+      document.getElementById('status').textContent = '';
+    });
+  </script>
+</body>
+</html>
